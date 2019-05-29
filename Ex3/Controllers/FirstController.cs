@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Ex3.Models;
+using System.Xml;
+using System.Text;
+
 namespace Ex3.Controllers
 {
     public class FirstController : Controller
@@ -29,7 +32,7 @@ namespace Ex3.Controllers
             Lon = Double.Parse(server.Get("position/longitude-deg"));
             return View();
         }
-        public ActionResult pathMap(string ip, int port, int time)
+        public ActionResult pathOnMap(string ip, int port, int time)
         {
             InfoServer server = InfoServer.Instance;
             server.Start(ip, port);
@@ -38,5 +41,27 @@ namespace Ex3.Controllers
             @Session["time"] = time;
             return View();
         }
+        public KeyValuePair<string,string> getPosition()
+        {            
+            InfoServer server = InfoServer.Instance;
+            string Lat = server.Get("position/latitude-deg");
+            string Lon = server.Get("position/longitude-deg");
+            var pair = new KeyValuePair<string, string>(Lat, Lon);
+            return pair;
+        }
+        private string ToXml()
+        {
+            StringBuilder sb = new StringBuilder();
+            XmlWriterSettings settings = new XmlWriterSettings();
+            XmlWriter writer = XmlWriter.Create(sb, settings);
+            writer.WriteStartDocument();
+            writer.WriteStartElement("Position");
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+            writer.Flush();
+            return sb.ToString();
+        }
+
+
     }
 }

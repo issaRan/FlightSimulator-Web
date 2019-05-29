@@ -20,7 +20,7 @@ namespace Ex3
                 defaults: new { controller = "FirstController" + "", action = "Index", id = UrlParameter.Optional }
              );
             routes.MapRoute("displayPath", "display/{ip}/{port}/{rate}",
-                new {controller = "First", action = "pathMap"});
+                new {controller = "First", action = "pathOnMap" });
             /*
             routes.MapRoute("displayPath", "/save/{ip}/{port}/4/10/flight1",
                 new { controller = "First", action = "display" });
