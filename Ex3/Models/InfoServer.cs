@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Web;
+using System.Text;
 
 namespace Ex3.Models
 {
@@ -15,6 +16,10 @@ namespace Ex3.Models
         TcpClient client;
         private string ip;
         int port;
+        private int Lon;
+        private int Lat;
+        Stream stream;
+        StreamReader reader;
         public InfoServer() {}
         #region
         private static InfoServer m_Instance = null;
@@ -32,16 +37,25 @@ namespace Ex3.Models
         #endregion
         public void Start(string ip, int port)
         {
-            listener = new TcpListener(new IPEndPoint(IPAddress.Parse(ip), port));
-            listener.Start();
-            Console.WriteLine("Waiting for connections...");
-            client = listener.AcceptTcpClient();
-            Console.WriteLine("added");
-        }
+            client = new TcpClient();
+            bool connected = false;
+            while (!client.Connected)
+            {
+                try
+                {
+                    IPEndPoint ep = new IPEndPoint(IPAddress.Parse(ip), port);
+                    client.Connect(ep);
+                }
+                catch (Exception) { };
+            }
+            stream = client.GetStream();
+            reader = new StreamReader(stream);
+        }/*
         public string[] readFromSimulator()
         {
+            
             NetworkStream stream = client.GetStream();
-            BinaryReader reader = new BinaryReader(stream);
+            StreamReader reader = new StreamReader(stream);
             string message = "";
             string[] splitted;
             char c;
@@ -51,7 +65,18 @@ namespace Ex3.Models
             }
             splitted = message.Split(',');
             message = "";
+            
             return splitted;
+            
+        }
+    */
+        public string Get(string path)
+        {
+            string message = "get" + " " + path + "\r\n";
+            byte[] toSend = ASCIIEncoding.ASCII.GetBytes(message);
+            stream.Write(toSend, 0, toSend.Length);
+            string param = reader.ReadLine().Split('\'')[1];
+            return param;
         }
         public void Stop()
         {
@@ -60,3 +85,25 @@ namespace Ex3.Models
         }
     }
 }
+/*
+<html>
+<head>
+    <link href="../../Image/Style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <canvas id="canvas"> </canvas>
+    <script>
+        var can = document.getElementById("canvas");
+        var context = can.getContext("2d");
+        context.beginPath();
+        context.lineWidth = 1;
+        var lon = (@ViewBag.Lon + 180 * (window.innerWidth / 360));
+        var lat = (@ViewBag.Lat + 90 * (window.innerWidth / 180));
+        context.arc(@ViewBag.Lon + 180, @ViewBag.Lat, 6, 0, 2 * Math.PI);
+        context.fillStyle = 'red';
+        context.fill();
+        context.stroke();
+    </script>
+</body>
+</html>
+*/
