@@ -1,28 +1,57 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "pathOnMap";
 }
-var IntervalTime = (1 / @Session["time"]) * 1000
+<!DOCTYPE html>
+<html>
+<body background="~/photo/export-map-share.png" alt="Map" style="background-size:100% 100%; background-attachment:fixed; width:100%; height:100%; overflow:hidden">
+    <canvas id="canvas"></canvas>
+    <script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    canvas.setAttribute('width', window.innerWidth);
+    canvas.setAttribute('height', window.innerHeight);
+    var IntervalTime = @Session["rate"] * 1000
+    var oldLon;
+    var oldLat;
+    var firstPoint = 1;
     myTimer = (function () {
-        $.post( "@Url.Action("getPosition")").done(function (xml) {
-        var xmlDoc = $.parseXML( xml ),
-        $xml = $( xmlDoc ),
-        LatFromServer = $xml.find("Lat").text();
-        LonFromServer = $xml.find("Lon").text();
-        <script>
-        canvas.setAttribute('width', window.innerWidth);
-        canvas.setAttribute('height', window.innerHeight);
-        var ctx = canvas.getContext("2d");
+        $.post("@Url.Action("ToXml")").done(function (xml) {            
+            var xmlDoc = $.parseXML(xml);
+            $xml = $(xmlDoc);
+            LatFromServer = $xml.find("lat").text();
+            LonFromServer = $xml.find("lon").text(); 
+            lon = ((parseFloat(LonFromServer) + 180) * (window.innerWidth / 360));
+            lat = ((parseFloat(LatFromServer) + 90) * (window.innerHeight / 180));
+            if (firstPoint == 1) {
+                drawFirstPoint(lon, lat);
+                oldLon = lon;
+                oldLat = lat;
+            } else {
+                drawLine(oldLon, oldLat, lat, lon);
+                oldLon = lon;
+                oldLat = lat;
+            }
+        });
+    });
+    setInterval(myTimer, IntervalTime);
+    myTimer();
+    function drawFirstPoint(Lon,Lat){
         ctx.beginPath();
-        var Lon = (LonFromServer + 180 *(window.innerWidth/360));
-        var Lat = (LatFromServer + 90 * (window.innerHeight / 180));
-        ctx.arc(Lon, Lat, 6, 0, 2 * Math.PI);
+        ctx.arc(lon, lat, 6, 0, 2 * Math.PI);
         ctx.fillStyle = 'red';
         ctx.fill();
         ctx.stroke();
-        </script>
-        });
-        });
-
-        setInterval(myTimer, IntervalTime);
-        myTimer();
+        firstPoint = 0;
+    }
+    function drawLine(oldLon, oldLat, newLat, newLon) {
+        ctx.fillStyle = 'red';
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.moveTo(oldLon, oldLat);
+        ctx.lineTo(newLon, newLat);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+    }
+    </script>
+</body>
+</html>

@@ -50,26 +50,7 @@ namespace Ex3.Models
             }
             stream = client.GetStream();
             reader = new StreamReader(stream);
-        }/*
-        public string[] readFromSimulator()
-        {
-            
-            NetworkStream stream = client.GetStream();
-            StreamReader reader = new StreamReader(stream);
-            string message = "";
-            string[] splitted;
-            char c;
-            while ((c = reader.ReadChar()) != '\n')
-            {
-                message += c;
-            }
-            splitted = message.Split(',');
-            message = "";
-            
-            return splitted;
-            
-        }
-    */
+        }   
         public string Get(string path)
         {
             string message = "get" + " " + path + "\r\n";

@@ -32,30 +32,31 @@ namespace Ex3.Controllers
             Lon = Double.Parse(server.Get("position/longitude-deg"));
             return View();
         }
-        public ActionResult pathOnMap(string ip, int port, int time)
+        [HttpGet]
+        public ActionResult pathOnMap(string ip, int port, int rate)
         {
             InfoServer server = InfoServer.Instance;
             server.Start(ip, port);
-            Lat = Double.Parse(server.Get("position/latitude-deg"));
-            Lon = Double.Parse(server.Get("position/longitude-deg"));
-            @Session["time"] = time;
+            Session["rate"] = rate;
             return View();
         }
-        public KeyValuePair<string,string> getPosition()
+        public KeyValuePair<string,string> GetPosition()
         {            
             InfoServer server = InfoServer.Instance;
-            string Lat = server.Get("position/latitude-deg");
-            string Lon = server.Get("position/longitude-deg");
-            var pair = new KeyValuePair<string, string>(Lat, Lon);
-            return pair;
+            string lat = server.Get("position/latitude-deg");
+            string lon = server.Get("position/longitude-deg");
+            return new KeyValuePair<string, string>(lat, lon);
         }
-        private string ToXml()
+        public string ToXml()
         {
+            KeyValuePair<string, string> salim = GetPosition();
             StringBuilder sb = new StringBuilder();
             XmlWriterSettings settings = new XmlWriterSettings();
             XmlWriter writer = XmlWriter.Create(sb, settings);
             writer.WriteStartDocument();
             writer.WriteStartElement("Position");
+            writer.WriteElementString("lat", salim.Key);
+            writer.WriteElementString("lon", salim.Value);
             writer.WriteEndElement();
             writer.WriteEndDocument();
             writer.Flush();
