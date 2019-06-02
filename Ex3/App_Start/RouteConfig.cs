@@ -11,23 +11,28 @@ namespace Ex3
     {
         public static void RegisterRoutes(RouteCollection routes)
         {
+            // Display the route
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute("pathOnMap", "display/{ip}/{port}/{rate}",
                defaults: new { controller = "First", action = "pathOnMap" });
-
+                
+            // Display a point
             routes.MapRoute("display", "display/{ip}/{port}",
                 defaults: new { controller = "First", action = "display" });
 
+            // Saving
             routes.MapRoute(
                 name: "save",
                 url: "save/{ip}/{port}/{rate}/{duration}/{fileName}",
                 defaults: new { controller = "First", action = "save" });
-
+            
+            // Loading
             routes.MapRoute(
                 name: "load",
                 url: "display/{fileName}/{rate}",
-                defaults: new { controller = "First", action = "load" });
+                defaults: new { controller = "First", action = "display" });
 
+            // Default
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",

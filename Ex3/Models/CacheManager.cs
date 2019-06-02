@@ -10,6 +10,17 @@ namespace Ex3.Models
     public class CacheManager
     {
         private string path;
+        public string Path
+        {
+            get
+            {
+                return this.path;
+            }
+            set
+            {
+                this.path = value;
+            }
+        }
         public CacheManager()
         {
             string str = "flight1";

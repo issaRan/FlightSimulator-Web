@@ -10,13 +10,12 @@
     var ctx = canvas.getContext("2d");
     canvas.setAttribute('width', window.innerWidth);
         canvas.setAttribute('height', window.innerHeight);
-    var IntervalTime = @Session["rate"] * 1000
-   /* var oldLon;
+    var IntervalTime = 1000 / @Session["rate"]
+    var oldLon;
     var oldLat;
-    var firstPoint = 1; */
+    var firstPoint = 1;
         myTimer = (function () {
-        // CONTINUE HERE
-        $.post("@Url.Action("GetPositionsList")").done(function (xml) {
+        $.post("@Url.Action("readPosition")").done(function (xml) {
             var xmlDoc = $.parseXML(xml);
             $xml = $(xmlDoc);
 
@@ -28,7 +27,7 @@
                 drawFirstPoint(lon, lat);
                 oldLon = lon;
                 oldLat = lat;
-            } else {
+            }else {
                 drawLine(oldLon, oldLat, lat, lon);
                 oldLon = lon;
                 oldLat = lat;

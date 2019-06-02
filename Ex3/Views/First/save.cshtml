@@ -14,7 +14,7 @@
         var oldLat;
         var firstPoint = 1;
         myTimer = (function () {
-            $.post("@Url.Action("ToXml")").done(function (xml) {
+            $.post("@Url.Action("SaveAndGetXmlPosition")").done(function (xml) {
                 var xmlDoc = $.parseXML(xml);
                 $xml = $(xmlDoc);
                 LatFromServer = $xml.find("lat").text();

@@ -50,7 +50,8 @@ namespace Ex3.Models
             writer.WriteStartElement("Position");
             writer.WriteElementString("lon", this.lon.ToString());
             writer.WriteElementString("lat", this.lat.ToString());
-            writer.WriteElementString("throttle", this.lat.ToString());
+            writer.WriteElementString("throttle", this.throttle.ToString());
+            writer.WriteElementString("rudder", this.rudder.ToString());
             writer.WriteEndElement();
         }
 }

@@ -10,12 +10,12 @@
     var ctx = canvas.getContext("2d");
     canvas.setAttribute('width', window.innerWidth);
         canvas.setAttribute('height', window.innerHeight);
-    var IntervalTime = @Session["rate"] * 1000
+    var IntervalTime = 1000 / @Session["rate"];
     var oldLon;
     var oldLat;
     var firstPoint = 1;
     myTimer = (function () {
-        $.post("@Url.Action("ToXml")").done(function (xml) {            
+        $.post("@Url.Action("readPosition")").done(function (xml) {            
             var xmlDoc = $.parseXML(xml);
             $xml = $(xmlDoc);
             LatFromServer = $xml.find("lat").text();
