@@ -19,10 +19,21 @@ namespace Ex3
                 defaults: new { controller = "First", action = "display" });
 
             routes.MapRoute(
+                name: "save",
+                url: "save/{ip}/{port}/{rate}/{duration}/{fileName}",
+                defaults: new { controller = "First", action = "save" });
+
+            routes.MapRoute(
+                name: "load",
+                url: "display/{fileName}/{rate}",
+                defaults: new { controller = "First", action = "load" });
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "FirstController" + "", action = "Index", id = UrlParameter.Optional }
              );
+              
             /*
             routes.MapRoute("displayPath", "/display/flight1/4",
                 new { controller = "First", action = "display" });

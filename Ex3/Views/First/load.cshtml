@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "pathOnMap";
+    ViewBag.Title = "load";
 }
 <!DOCTYPE html>
 <html>
@@ -11,15 +11,17 @@
     canvas.setAttribute('width', window.innerWidth);
         canvas.setAttribute('height', window.innerHeight);
     var IntervalTime = @Session["rate"] * 1000
-    var oldLon;
+   /* var oldLon;
     var oldLat;
-    var firstPoint = 1;
-    myTimer = (function () {
-        $.post("@Url.Action("ToXml")").done(function (xml) {            
+    var firstPoint = 1; */
+        myTimer = (function () {
+        // CONTINUE HERE
+        $.post("@Url.Action("GetPositionsList")").done(function (xml) {
             var xmlDoc = $.parseXML(xml);
             $xml = $(xmlDoc);
+
             LatFromServer = $xml.find("lat").text();
-            LonFromServer = $xml.find("lon").text(); 
+            LonFromServer = $xml.find("lon").text();
             lon = ((parseFloat(LonFromServer) + 180) * (window.innerWidth / 360));
             lat = ((parseFloat(LatFromServer) + 90) * (window.innerHeight / 180));
             if (firstPoint == 1) {
