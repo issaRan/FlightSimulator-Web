@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "pathOnMap10Sec";
+}
+<!DOCTYPE html>
+<html>
+<body>
+    <script>
+    var IntervalTime = (1 / @Session["rate"]) * 1000
+        myTimer = (function () {
+            $.post("@Url.Action("getPosition")").done(function (xml) {
+                var xmlDoc = $.parseXML(xml),
+                    $xml = $(xmlDoc),
+                    LatFromServer = $xml.find("Lat").text();
+                LonFromServer = $xml.find("Lon").text();
+                canvas.setAttribute('width', window.innerWidth);
+                canvas.setAttribute('height', window.innerHeight);
+                var ctx = canvas.getContext("2d");
+                ctx.beginPath();
+                var Lon = (LonFromServer + 180 * (window.innerWidth / 360));
+                var Lat = (LatFromServer + 90 * (window.innerHeight / 180));
+                ctx.arc(Lon, Lat, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.stroke();
+            });
+        });
+
+        var intervalid = setInterval(myTimer, IntervalTime);
+        myTimer();
+
+        endFunction = (function (intervalid) {
+            clearInterval(intervalid)
+        });
+    </script>
+</body>
+</html>

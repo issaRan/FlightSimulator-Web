@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "save";
+}
+<!DOCTYPE html>
+<html>
+<body background="~/photo/export-map-share.png" alt="Map" style="background-size:100% 100%; background-attachment:fixed; width:100%; height:100%; overflow:hidden">
+    <canvas id="canvas"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+        canvas.setAttribute('width', window.innerWidth);
+        canvas.setAttribute('height', window.innerHeight);
+        var oldLon;
+        var oldLat;
+        var firstPoint = 1;
+        myTimer = (function () {
+            $.post("@Url.Action("SaveAndGetXmlPosition")").done(function (xml) {
+                var xmlDoc = $.parseXML(xml);
+                $xml = $(xmlDoc);
+                LatFromServer = $xml.find("lat").text();
+                LonFromServer = $xml.find("lon").text();
+                lon = ((parseFloat(LonFromServer) + 180) * (window.innerWidth / 360));
+                lat = ((parseFloat(LatFromServer) + 90) * (window.innerHeight / 180));
+                if (firstPoint == 1) {
+                    drawFirstPoint(lon, lat);
+                    oldLon = lon;
+                    oldLat = lat;
+                } else {
+                    drawLine(oldLon, oldLat, lat, lon);
+                    oldLon = lon;
+                    oldLat = lat;
+                }
+            });
+        });
+        var IntervalTime = 1000 / @Session["rate"];
+        var interval = setInterval(myTimer, IntervalTime);
+        setTimeout(function () { clearInterval(interval); }, @Session["duration"] * 1000);
+        myTimer();
+    function drawFirstPoint(Lon,Lat){
+        ctx.beginPath();
+        ctx.arc(lon, lat, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = 'red';
+        ctx.fill();
+        ctx.stroke();
+        firstPoint = 0;
+    }
+    function drawLine(oldLon, oldLat, newLat, newLon) {
+        ctx.fillStyle = 'red';
+        ctx.beginPath();
+        ctx.lineWidth = 3;
+        ctx.moveTo(oldLon, oldLat);
+        ctx.lineTo(newLon, newLat);
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+    }
+    </script>
+</body>
+</html>
