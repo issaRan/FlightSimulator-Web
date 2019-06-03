@@ -18,6 +18,7 @@ namespace Ex3.Models
         int port;
         private int Lon;
         private int Lat;
+        private Boolean connected;
         Stream stream;
         StreamReader reader;
         public InfoServer() {}
@@ -38,7 +39,6 @@ namespace Ex3.Models
         public void Start(string ip, int port)
         {
             client = new TcpClient();
-            bool connected = false;
             while (!client.Connected)
             {
                 try
@@ -50,6 +50,7 @@ namespace Ex3.Models
             }
             stream = client.GetStream();
             reader = new StreamReader(stream);
+            this.connected = true;
         }   
         public string Get(string path)
         {
@@ -63,6 +64,10 @@ namespace Ex3.Models
         {
             client.Close();
             listener.Stop();
+        }
+        public Boolean booleanState()
+        {
+            return this.connected;
         }
     }
 }

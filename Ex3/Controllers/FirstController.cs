@@ -27,6 +27,10 @@ namespace Ex3.Controllers
         public ActionResult display(string ip, int port)
         {
             InfoServer server = InfoServer.Instance;
+            if (server.booleanState())
+            {
+                server.Stop();
+            }
             server.Start(ip, port);
             Lat = Double.Parse(server.Get("position/latitude-deg"));
             Lon = Double.Parse(server.Get("position/longitude-deg"));
@@ -36,6 +40,10 @@ namespace Ex3.Controllers
         public ActionResult pathOnMap(string ip, int port, int rate)
         {
             InfoServer server = InfoServer.Instance;
+            if (server.booleanState())
+            {
+                server.Stop();
+            }
             server.Start(ip, port);
             Session["rate"] = rate;
             return View();

@@ -12,6 +12,7 @@ namespace Ex3
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
             routes.MapRoute("pathOnMap", "display/{ip}/{port}/{rate}",
                defaults: new { controller = "First", action = "pathOnMap" });
 
