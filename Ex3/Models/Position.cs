@@ -54,5 +54,5 @@ namespace Ex3.Models
             writer.WriteElementString("rudder", this.rudder.ToString());
             writer.WriteEndElement();
         }
-}
+    }
 }

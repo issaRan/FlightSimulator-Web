@@ -18,13 +18,13 @@ namespace Ex3.Models
             }
             set
             {
-                this.path = value;
+                this.path = AppDomain.CurrentDomain.BaseDirectory + @"\" + value + ".txt";
             }
         }
         public CacheManager()
         {
             string str = "flight1";
-             this.path = AppDomain.CurrentDomain.BaseDirectory + @"\" + str + ".txt";
+             this.Path = str;
         }
         #region
         private static CacheManager m_Instance = null;

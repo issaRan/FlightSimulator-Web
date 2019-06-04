@@ -3,7 +3,7 @@
 }
 <!DOCTYPE html>
 <html>
-<body background="~/photo/export-map-share.png" alt="Map" style="background-size:100% 100%; background-attachment:fixed; width:100%; height:100%; overflow:hidden">
+<body>
     <canvas id="canvas"></canvas>
     <script>
         var canvas = document.getElementById("canvas");
@@ -32,9 +32,11 @@
                 }
             });
         });
-        var IntervalTime = 1000 / @Session["rate"];
+        var IntervalTime = 1000 * @Session["rate"];
         var interval = setInterval(myTimer, IntervalTime);
-        setTimeout(function () { clearInterval(interval); }, @Session["duration"] * 1000);
+        setTimeout(function () {
+            alert("SaLiMA");
+            clearInterval(interval);}, @Session["duration"] * 1000);
         myTimer();
     function drawFirstPoint(Lon,Lat){
         ctx.beginPath();

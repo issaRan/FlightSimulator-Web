@@ -7,6 +7,7 @@ using Ex3.Models;
 using System.Xml;
 using System.Text;
 using System.Net;
+using System.IO;
 
 namespace Ex3.Controllers
 {
@@ -61,6 +62,8 @@ namespace Ex3.Controllers
         [HttpGet]
         public ActionResult save(string ip, int port, int rate, int duration, string name)
         {
+            CacheManager.Instance.Path = name;
+            System.IO.File.WriteAllBytes(CacheManager.Instance.Path, new byte[0]);
             InfoServer server = InfoServer.Instance;
             server.Start(ip, port);
             Session["rate"] = rate;
@@ -90,7 +93,6 @@ namespace Ex3.Controllers
                 files = files.Skip(1).ToArray();
                 Session["arr"] = files;
                 return ToXml(pos);
-
             }
             int x = -1000;
             return ToXml(new Position(x, x, x, x));
@@ -106,8 +108,7 @@ namespace Ex3.Controllers
             string lon = server.Get("position/longitude-deg");
             string throttle = server.Get("controls/engines/current-engine/throttle");
             string rudder = server.Get("controls/flight/rudder");
-            Position pos =  new Position(Double.Parse(lon), Double.Parse(lat),
-            Double.Parse(throttle), Double.Parse(rudder));
+            Position pos =  new Position(Double.Parse(lon), Double.Parse(lat),Double.Parse(throttle), Double.Parse(rudder));
             return pos;
         }
         public string SaveAndGetXmlPosition()

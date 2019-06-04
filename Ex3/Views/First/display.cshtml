@@ -3,15 +3,15 @@
 }
 <!DOCTYPE html>
 <html>
-<body background="~/photo/export-map-share.png" alt="Map" style="background-size:100% 100%; background-attachment:fixed; width:100%; height:100%; overflow:hidden">
+<body>
     <canvas id="canvas"></canvas>
     <script>
     canvas.setAttribute('width', window.innerWidth);
     canvas.setAttribute('height', window.innerHeight);
     var ctx = canvas.getContext("2d");
     ctx.beginPath();
-    var Lon = (@ViewBag.Lon + 180 *(window.innerWidth/360));
-    var Lat = (@ViewBag.Lat + 90 * (window.innerHeight / 180));
+    var Lon = ((parseFloat(@ViewBag.Lon + 180)) *(window.innerWidth/360));
+    var Lat = ((parseFloat(@ViewBag.Lat + 90)) * (window.innerHeight / 180));
     ctx.arc(Lon, Lat, 6, 0, 2 * Math.PI);
     ctx.fillStyle = 'red';
     ctx.fill();

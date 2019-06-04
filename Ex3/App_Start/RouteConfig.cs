@@ -24,7 +24,7 @@ namespace Ex3
             // Saving
             routes.MapRoute(
                 name: "save",
-                url: "save/{ip}/{port}/{rate}/{duration}/{fileName}",
+                url: "save/{ip}/{port}/{rate}/{duration}/{name}",
                 defaults: new { controller = "First", action = "save" });
             
             // Loading

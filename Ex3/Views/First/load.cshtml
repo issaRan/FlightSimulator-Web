@@ -3,14 +3,14 @@
 }
 <!DOCTYPE html>
 <html>
-<body background="~/photo/export-map-share.png" alt="Map" style="background-size:100% 100%; background-attachment:fixed; width:100%; height:100%; overflow:hidden">
+<body>
     <canvas id="canvas"></canvas>
-    <script>
+    <script>   
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     canvas.setAttribute('width', window.innerWidth);
         canvas.setAttribute('height', window.innerHeight);
-    var IntervalTime = 1000 / @Session["rate"]
+    var IntervalTime = 1000 * @Session["rate"]
     var oldLon;
     var oldLat;
     var firstPoint = 1;
@@ -18,7 +18,6 @@
         $.post("@Url.Action("readPosition")").done(function (xml) {
             var xmlDoc = $.parseXML(xml);
             $xml = $(xmlDoc);
-
             LatFromServer = $xml.find("lat").text();
             LonFromServer = $xml.find("lon").text();
             lon = ((parseFloat(LonFromServer) + 180) * (window.innerWidth / 360));
@@ -27,20 +26,25 @@
                 drawFirstPoint(lon, lat);
                 oldLon = lon;
                 oldLat = lat;
-            }else {
+            }
+            else if (LatFromServer == -1000 && LonFromServer == -1000) {
+                clearInterval(id);
+            }
+            else {
                 drawLine(oldLon, oldLat, lat, lon);
                 oldLon = lon;
                 oldLat = lat;
             }
         });
     });
-    setInterval(myTimer, IntervalTime);
+    var id = setInterval(myTimer, IntervalTime);
     myTimer();
     function drawFirstPoint(Lon,Lat){
         ctx.beginPath();
         ctx.arc(lon, lat, 6, 0, 2 * Math.PI);
         ctx.fillStyle = 'red';
         ctx.fill();
+        ctx.strokeStyle = "blue";
         ctx.stroke();
         firstPoint = 0;
     }
